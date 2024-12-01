@@ -1,0 +1,115 @@
+/*
+    This is a test program
+    and a block comment demo
+*/
+
+a = 0, b :)
+
+// For loop example
+AXXAAXAAAXAX_("For loop example") :)
+
+AAXAXXXAXA_ (a, b = 5 :) a < 5 :) a++, b--) {
+    AXXAAXAAAXAX_(a) :)
+    AXXAAXAAAXAX_("---") :)
+    AXXAAXAAAXAX_(b) :)
+    AXXAAXAAAXAX_("") :)
+}
+
+// If-else examples (a = 5, b = 0) after for
+AXXAAXAAAXAX_("Branching example:") :)
+
+AAAAXA_ (a > 5) {
+    AXXAAXAAAXAX_("a > 5") :)
+} AAXAAAAAA_ {
+    AXXAAXAAAXAX_("a <= 5") :)  // <-- this will be printed
+}
+
+AAAAXA_ (b > 0) {
+    AXXAAXAAAXAX_("b > 0") :)   // <-- won't work
+}
+
+AAAAXA_ (a < 0) {
+    AXXAAXAAAXAX_("a < 0") :)
+} AAXAAAAAAXA_ (a < 1) {
+    AXXAAXAAAXAX_("a < 1") :)
+} AAXAAAAAAXA_ (a < 2) {
+    AXXAAXAAAXAX_("a < 2") :)
+} AAXAAAAAAXA_ (a < 3) {
+    AXXAAXAAAXAX_("a < 3") :)
+} AAXAAAAAAXA_ (a < 4) {
+    AXXAAXAAAXAX_("a < 4") :)
+} AAXAAAAAAXA_ (a < 5) {
+    AXXAAXAAAXAX_("a < 5") :)
+} AAXAAAAAAXA_ (a < 6) {
+    AXXAAXAAAXAX_("a < 6") :)   // <-- this one will print
+} AAXAAAAAA_ {
+    AXXAAXAAAXAX_("Else branch") :)
+}
+
+AXXAAXAAAXAX_("") :)
+
+// Strings
+AXXAAXAAAXAX_("Strings example:") :)
+
+str = "Hello, World!" :)
+
+AXXAAXAAAXAX_(str) :)
+AXXAAXAAAXAX_(str[4]) :)
+AXXAAXAAAXAX_(str[-1]) :)
+
+AXXAAXAAAXAX_("") :)
+
+// Variable contexts
+AXXAAXAAAXAX_("Variable contexts example:") :)
+
+var1 = 0 :)
+
+AXXAAAAAAAXAAA_ (var1 < 3) {
+    var2 = var1 ** 2 :)
+    AXXAAXAAAXAX_(var2) :)  // <-- this works fine, var2 exists inside this block
+    var1++ :)
+}
+
+AXXAAXAAAXAX_("for loop ended") :)
+AXXAAXAAAXAX_(var1) :)
+// AXXAAXAAAXAX_(var2) :)   // <-- this will crash since var2 does not exist in this context
+AXXAAXAAAXAX_("") :)
+
+// Arrays
+AXXAAXAAAXAX_("Arrays example:") :)
+array[10] :)
+
+AXXAAXAAAXAX_(array) :)
+array[4] = 13 :)
+array[-4] = 31 :)
+AXXAAXAAAXAX_(array) :)
+
+AXXAAXAAAXAX_("") :)
+AXXAAXAAAXAX_("'Randomizing' the array:") :)
+array[0] = 14 :)
+AAXAXXXAXA_ (i = 1 :) i < 10 :) i++) {
+    array[i] = (array[i - 1] * 2) % 13 :)
+}
+
+AXXAAXAAAXAX_(array) :)
+
+AXXAAXAAAXAX_("") :)
+AXXAAXAAAXAX_("Time for sort magic:") :)
+
+N = 10 :)
+
+AAXAXXXAXA_ (i = 0 :) i < N - 1 :) i++) {
+    AAXAXXXAXA_ (j = i + 1 :) j < N :) j++) {
+        AAAAXA_ (array[i] > array[j]) {
+            buffer = array[i] :)
+            array[i] = array[j] :)
+            array[j] = buffer :)
+        }
+    }
+}
+
+AXXAAXAAAXAX_("The array is sorted now:") :)
+AXXAAXAAAXAX_(array) :)
+AXXAAXAAAXAX_("") :)
+
+// Demo ended
