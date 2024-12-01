@@ -1,0 +1,117 @@
+// More readable version of example.XD for unfamiliar users
+
+/*
+    This is a test program
+    and a block comment demo
+*/
+
+var a = 0, b;
+
+// For loop example
+print("For loop example");
+
+for (a, b = 5; a < 5; a++, b--) {
+    print(a) :)
+    print("---") :)
+    print(b) :)
+    print("") :)
+}
+
+// If-else examples (a = 5, b = 0) after for
+print("Branching example:");
+
+if (a > 5) {
+    print("a > 5");
+} else {
+    print("a <= 5");  // <-- this will be printed
+}
+
+if (b > 0) {
+    print("b > 0");   // <-- won't work
+}
+
+if (a < 0) {
+    print("a < 0");
+} elif (a < 1) {
+    print("a < 1");
+} elif (a < 2) {
+    print("a < 2");
+} elif (a < 3) {
+    print("a < 3");
+} elif (a < 4) {
+    print("a < 4");
+} elif (a < 5) {
+    print("a < 5");
+} elif (a < 6) {
+    print("a < 6");   // <-- this one will print
+} else {
+    print("Else branch");
+}
+
+print("");
+
+// Strings
+print("Strings example:");
+
+str = "Hello, World!";
+
+print(str);
+print(str[4]);
+print(str[-1]);
+
+print("");
+
+// Variable contexts
+print("Variable contexts example:");
+
+var1 = 0;
+
+while (var1 < 3) {
+    var2 = var1 ** 2;
+    print(var2);  // <-- this works fine, var2 exists inside this block
+    var1++;
+}
+
+print("for loop ended");
+print(var1);
+// print(var2);   // <-- this will crash since var2 does not exist in this context
+print("");
+
+// Arrays
+print("Arrays example:");
+array[10];
+
+print(array);
+array[4] = 13;
+array[-4] = 31;
+print(array);
+
+print("");
+print("'Randomizing' the array:");
+array[0] = 14 :)
+for (i = 1; i < 10; i++) {
+    array[i] = (array[i - 1] * 2) % 13;
+}
+
+print(array);
+
+print("");
+print("Time for sort magic:");
+
+N = 10 :)
+
+for (i = 0; i < N - 1; i++) {
+    for (j = i + 1; j < N; j++) {
+        if (array[i] > array[j]) {
+            buffer = array[i];
+            array[i] = array[j];
+            array[j] = buffer;
+        }
+    }
+}
+
+print("The array is sorted now:");
+print(array);
+print("");
+
+// Demo ended
