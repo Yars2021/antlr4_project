@@ -51,7 +51,7 @@ AXXAAXAAAXAX_("") :)
 // Strings
 AXXAAXAAAXAX_("Strings example:") :)
 
-str = "Hello, World!" :)
+AAAXAXAXA_ str = "Hello, World!" :)
 
 AXXAAXAAAXAX_(str) :)
 AXXAAXAAAXAX_(str[4]) :)
@@ -62,10 +62,10 @@ AXXAAXAAAXAX_("") :)
 // Variable contexts
 AXXAAXAAAXAX_("Variable contexts example:") :)
 
-var1 = 0 :)
+AAAXAXAXA_ var1 = 0 :)
 
 AXXAAAAAAAXAAA_ (var1 < 3) {
-    var2 = var1 ** 2 :)
+    AAAXAXAXA_ var2 = var1 ** 2 :)
     AXXAAXAAAXAX_(var2) :)  // <-- this works fine, var2 exists inside this block
     var1++ :)
 }
