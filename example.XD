@@ -96,10 +96,10 @@ AXXAAXAAAXAX_(array) :)
 AXXAAXAAAXAX_("") :)
 AXXAAXAAAXAX_("Time for sort magic:") :)
 
-N = 10 :)
+AAAXAXAXA_ N = 10 :)
 
-AAXAXXXAXA_ (i = 0 :) i < N - 1 :) i++) {
-    AAXAXXXAXA_ (j = i + 1 :) j < N :) j++) {
+AAXAXXXAXA_ (AAAXAXAXA_ i = 0 :) i < N - 1 :) i++) {
+    AAXAXXXAXA_ (AAAXAXAXA_ j = i + 1 :) j < N :) j++) {
         AAAAXA_ (array[i] > array[j]) {
             buffer = array[i] :)
             array[i] = array[j] :)

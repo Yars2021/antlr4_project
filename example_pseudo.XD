@@ -53,7 +53,7 @@ print("");
 // Strings
 print("Strings example:");
 
-str = "Hello, World!";
+var str = "Hello, World!";
 
 print(str);
 print(str[4]);
@@ -64,10 +64,10 @@ print("");
 // Variable contexts
 print("Variable contexts example:");
 
-var1 = 0;
+var var1 = 0;
 
 while (var1 < 3) {
-    var2 = var1 ** 2;
+    var var2 = var1 ** 2;
     print(var2);  // <-- this works fine, var2 exists inside this block
     var1++;
 }
@@ -79,7 +79,7 @@ print("");
 
 // Arrays
 print("Arrays example:");
-array[10];
+var array[10];
 
 print(array);
 array[4] = 13;
@@ -98,10 +98,10 @@ print(array);
 print("");
 print("Time for sort magic:");
 
-N = 10;
+var N = 10;
 
-for (i = 0; i < N - 1; i++) {
-    for (j = i + 1; j < N; j++) {
+for (var i = 0; i < N - 1; i++) {
+    for (var j = i + 1; j < N; j++) {
         if (array[i] > array[j]) {
             buffer = array[i];
             array[i] = array[j];
