@@ -3,12 +3,12 @@
     and a block comment demo
 */
 
-a = 0, b :)
+AAAXAXAXA_ a = 0, b :)
 
 // For loop example
 AXXAAXAAAXAX_("For loop example") :)
 
-AAXAXXXAXA_ (a, b = 5 :) a < 5 :) a++, b--) {
+AAXAXXXAXA_ (a, b = 5 :) a < 5 :) a++, --b) {
     AXXAAXAAAXAX_(a) :)
     AXXAAXAAAXAX_("---") :)
     AXXAAXAAAXAX_(b) :)
@@ -77,7 +77,7 @@ AXXAAXAAAXAX_("") :)
 
 // Arrays
 AXXAAXAAAXAX_("Arrays example:") :)
-array[10] :)
+AAAXAXAXA_ array[10] :)
 
 AXXAAXAAAXAX_(array) :)
 array[4] = 13 :)

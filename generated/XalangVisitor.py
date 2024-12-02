@@ -262,27 +262,82 @@ class XalangVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by XalangParser#modified_assign_expression.
     def visitModified_assign_expression(self, ctx: XalangParser.Modified_assign_expressionContext):
         if ctx.getChild(1).getText() == "*=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] *= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] *= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == "/=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] /= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] /= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == "%=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] %= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] %= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == "div=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] //= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] //= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == "+=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] += self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] += self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == "-=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] -= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] -= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == "&=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] &= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] &= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == "|=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] |= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] |= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == "^=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] ^= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] ^= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == "<<=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] <<= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] <<= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
         elif ctx.getChild(1).getText() == ">>=":
-            pass
+            if ctx.getChildCount() == 3:
+                self.var_stack[-1][ctx.getChild(0).getText()] >>= self.visit(ctx.getChild(2))
+                return self.var_stack[-1][ctx.getChild(0).getText()]
+            else:
+                self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))] >>= self.visit(ctx.getChild(5))
+                return self.var_stack[-1][ctx.getChild(0).getText()][int(self.visit(ctx.getChild(2)))]
 
     # Visit a parse tree produced by XalangParser#assign_expression.
     def visitAssign_expression(self, ctx: XalangParser.Assign_expressionContext):

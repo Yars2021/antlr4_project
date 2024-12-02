@@ -11,7 +11,7 @@ code_instruction
     ;
 
 var_def
-    :   var_names
+    :   'AAAXAXAXA_' var_names
     ;
 
 var_names
