@@ -16,12 +16,18 @@ class XalangVisitorCompiler(ParseTreeVisitor):
     def get_ast(self):
         return self.AST
 
+    def unpack(self, node):
+        return node
+
     # Visit a parse tree produced by XalangParser#program.
     def visitProgram(self, ctx: XalangParser.ProgramContext):
         self.AST = []
 
         for i in range(ctx.getChildCount() - 1):
-            self.AST.append(self.visit(ctx.getChild(i)))
+            node = self.visit(ctx.getChild(i))
+
+            if node is not None:
+                self.AST.append(self.unpack(node))
 
     # Visit a parse tree produced by XalangParser#code_instruction_var_def.
     def visitCode_instruction_var_def(self, ctx: XalangParser.Code_instruction_var_defContext):
@@ -78,19 +84,31 @@ class XalangVisitorCompiler(ParseTreeVisitor):
 
     # Visit a parse tree produced by XalangParser#for_operators.
     def visitFor_operators(self, ctx: XalangParser.For_operatorsContext):
-        return self.visitChildren(ctx)
+        children = []
+
+        for i in range(0, ctx.getChildCount(), 2):
+            children.append(self.visit(ctx.getChild(i)))
+
+        return ["pack", children]
 
     # Visit a parse tree produced by XalangParser#for_var_create.
     def visitFor_var_create(self, ctx: XalangParser.For_var_createContext):
-        return self.visitChildren(ctx)
+        return self.visit(ctx.getChild(0))
 
     # Visit a parse tree produced by XalangParser#for_expression.
     def visitFor_expression(self, ctx: XalangParser.For_expressionContext):
-        return self.visitChildren(ctx)
+        return self.visit(ctx.getChild(0))
 
     # Visit a parse tree produced by XalangParser#code_block.
     def visitCode_block(self, ctx: XalangParser.Code_blockContext):
-        return self.visitChildren(ctx)
+        children = self.visitChildren(ctx)
+        flattened = []
+
+        for child in children:
+            if child is not None:
+                flattened.append(child)
+
+        return flattened
 
     # Visit a parse tree produced by XalangParser#print_op.
     def visitPrint_op(self, ctx: XalangParser.Print_opContext):
@@ -98,48 +116,46 @@ class XalangVisitorCompiler(ParseTreeVisitor):
 
     # Visit a parse tree produced by XalangParser#if_op.
     def visitIf_op(self, ctx: XalangParser.If_opContext):
-        self.duplicate_stack()
+        branches = [[self.visit(ctx.getChild(2)), self.visit(ctx.getChild(5))]]
 
-        if self.visit(ctx.getChild(2)):
-            return self.visit(ctx.getChild(5))
-        else:
-            index = 7
+        index = 7
 
-            while index < ctx.getChildCount() and ctx.getChild(index).getText() == 'AAXAAAAAAXA_':
-                if self.visit(ctx.getChild(index + 2)):
-                    return self.visit(ctx.getChild(index + 5))
+        while index < ctx.getChildCount() and ctx.getChild(index).getText() == 'AAXAAAAAAXA_':
+            branches.append([self.visit(ctx.getChild(index + 2)), self.visit(ctx.getChild(index + 5))])
+            index += 7
 
-                index += 7
+        if index < ctx.getChildCount() and ctx.getChild(index).getText() == 'AAXAAAAAA_':
+            branches.append(["else", self.visit(ctx.getChild(index + 2))])
 
-            if index < ctx.getChildCount() and ctx.getChild(index).getText() == 'AAXAAAAAA_':
-                return self.visit(ctx.getChild(index + 2))
-
-        self.restore_stack()
+        return ["branch", branches]
 
     # Visit a parse tree produced by XalangParser#for_op.
     def visitFor_op(self, ctx: XalangParser.For_opContext):
         if ctx.getChildCount() > 10:
-            self.visit(ctx.getChild(2))
-            self.duplicate_stack()
+            ops = []
 
-            while self.visit(ctx.getChild(4)):
-                for i in range(9, ctx.getChildCount() - 1):
-                    self.visit(ctx.getChild(i))
+            for i in range(9, ctx.getChildCount() - 1):
+                child = self.visit(ctx.getChild(i))
 
-                self.visit(ctx.getChild(6))
+                if child is not None:
+                    ops.append(child)
 
-            self.restore_stack()
+            ops.append(self.visit(ctx.getChild(6)))
+
+            return ["pack", [self.visit(ctx.getChild(2)), ["loop", self.visit(ctx.getChild(4)), ops]]]
 
     # Visit a parse tree produced by XalangParser#while_op.
     def visitWhile_op(self, ctx: XalangParser.While_opContext):
         if ctx.getChildCount() > 6:
-            self.duplicate_stack()
+            ops = []
 
-            while self.visit(ctx.getChild(2)):
-                for i in range(5, ctx.getChildCount()):
-                    self.visit(ctx.getChild(i))
+            for i in range(5, ctx.getChildCount()):
+                child = self.visit(ctx.getChild(i))
 
-            self.restore_stack()
+                if child is not None:
+                    ops.append(child)
+
+            return ["loop", self.visit(ctx.getChild(2)), ops]
 
     # Visit a parse tree produced by XalangParser#add_expression.
     def visitAdd_expression(self, ctx: XalangParser.Add_expressionContext):
@@ -169,7 +185,12 @@ class XalangVisitorCompiler(ParseTreeVisitor):
 
     # Visit a parse tree produced by XalangParser#unary_minus_expression.
     def visitUnary_minus_expression(self, ctx: XalangParser.Unary_minus_expressionContext):
-        return -self.visit(ctx.getChild(1))
+        op = self.visit(ctx.getChild(1))
+
+        if op[0] == "lit" and op[1] == "int":
+            return ["lit", "int", str(-int(op[2]))]
+
+        return [ctx.getChild(0).getText(), op]
 
     # Visit a parse tree produced by XalangParser#logic_or_expression.
     def visitLogic_or_expression(self, ctx: XalangParser.Logic_or_expressionContext):
@@ -180,15 +201,15 @@ class XalangVisitorCompiler(ParseTreeVisitor):
             if ctx.getChild(1).getText() == "||":
                 return ["lit", "int", str(int(left_op[2]) or int(right_op[2]))]
             elif ctx.getChild(1).getText() == "^^":
-                return ["lit", "int", str((int(left_op[2]) or int(right_op[2])) and not ((int(left_op[2]) and int(right_op[2])))]
+                return ["lit", "int", str((int(left_op[2]) or int(right_op[2])) and not ((int(left_op[2]) and int(right_op[2]))))]
 
         return [ctx.getChild(1).getText(), left_op, right_op]
 
     # Visit a parse tree produced by XalangParser#postfix_modifier_expression.
     def visitPostfix_modifier_expression(self, ctx: XalangParser.Postfix_modifier_expressionContext):
-        if ctx.getChild(0).getText() == "++":
+        if ctx.getChild(1).getText() == "++":
             return ["postfix_inc", ctx.getChild(0).getText()]
-        elif ctx.getChild(0).getText() == "--":
+        elif ctx.getChild(1).getText() == "--":
             return ["postfix_dec", ctx.getChild(0).getText()]
 
     # Visit a parse tree produced by XalangParser#index_expression.
@@ -311,9 +332,9 @@ class XalangVisitorCompiler(ParseTreeVisitor):
     # Visit a parse tree produced by XalangParser#modified_assign_expression.
     def visitModified_assign_expression(self, ctx: XalangParser.Modified_assign_expressionContext):
         if ctx.getChildCount() == 3:
-            return ["modified_assign_var", ctx.getChild(0).getText(), ctx.getChild(1).getText(), self.visit(ctx.getChild(2))]
+            return ["assign_var", ctx.getChild(0).getText(), [ctx.getChild(1).getText()[:-1], ["get_var", ctx.getChild(0).getText()], self.visit(ctx.getChild(2))]]
         else:
-            return ["modified_assign_arr", ctx.getChild(0).getText(), self.visit(ctx.getChild(2)), ctx.getChild(4).getText(), self.visit(ctx.getChild(5))]
+            return ["assign_arr", ctx.getChild(0).getText(), self.visit(ctx.getChild(2)), [ctx.getChild(4).getText()[:-1], ["[]", ctx.getChild(0).getText(), self.visit(ctx.getChild(2))], self.visit(ctx.getChild(5))]]
 
     # Visit a parse tree produced by XalangParser#assign_expression.
     def visitAssign_expression(self, ctx: XalangParser.Assign_expressionContext):
