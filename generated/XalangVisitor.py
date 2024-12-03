@@ -164,7 +164,7 @@ class XalangVisitor(ParseTreeVisitor):
         if ctx.getChild(1).getText() == "||":
             return self.visit(ctx.getChild(0)) or self.visit(ctx.getChild(2))
         elif ctx.getChild(1).getText() == "^^":
-            return self.visit(ctx.getChild(0)) or self.visit(ctx.getChild(2)) and \
+            return (self.visit(ctx.getChild(0)) or self.visit(ctx.getChild(2))) and \
                 not (self.visit(ctx.getChild(0)) and self.visit(ctx.getChild(2)))
 
     # Visit a parse tree produced by XalangParser#postfix_modifier_expression.
@@ -229,10 +229,10 @@ class XalangVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by XalangParser#not_expression.
     def visitNot_expression(self, ctx: XalangParser.Not_expressionContext):
-        if ctx.getChild(1).getText() == "!":
-            return self.visit(ctx.getChild(0)) | self.visit(ctx.getChild(2))
-        elif ctx.getChild(1).getText() == "~":
-            return self.visit(ctx.getChild(0)) ^ self.visit(ctx.getChild(2))
+        if ctx.getChild(0).getText() == "!":
+            return not self.visit(ctx.getChild(1))
+        elif ctx.getChild(0).getText() == "~":
+            return ~self.visit(ctx.getChild(1))
 
     # Visit a parse tree produced by XalangParser#expression_literal.
     def visitExpression_literal(self, ctx: XalangParser.Expression_literalContext):
