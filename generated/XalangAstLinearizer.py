@@ -28,11 +28,11 @@ class XalangAstLinearizer:
             return node
         elif node[0] == "unop":
             buffer = self.lock_first_free()
-            self.linear.append(["movb", ["%buf", buffer], [node[0], node[1], self.linearize(node[2])]])
+            self.linear.append(["movb", ["%buf", buffer], ["unop", node[0], node[1], self.linearize(node[2])]])
             return ["%buf", buffer]
         elif node[0] == "binop":
             buffer = self.lock_first_free()
-            self.linear.append(["movb", ["%buf", buffer], [node[1], self.linearize(node[2]), self.linearize(node[3])]])
+            self.linear.append(["movb", ["%buf", buffer], ["binop", node[1], self.linearize(node[2]), self.linearize(node[3])]])
             return ["%buf", buffer]
         elif node[0] == "var":
             expr = self.linearize(node[3])
