@@ -3,6 +3,7 @@ from antlr4 import *
 from generated.XalangLexer import XalangLexer
 from generated.XalangParser import XalangParser
 from generated.XalangVisitorCompiler import XalangVisitorCompiler
+from generated.XalangAstLinearizer import XalangAstLinearizer
 
 
 def main(argv):
@@ -18,14 +19,18 @@ def main(argv):
         visitor = XalangVisitorCompiler()
         visitor.visit(tree)
 
-        print(visitor.get_ast())
-        # file = open(argv[2], "w")
-        #
-        # for asm in asm_list:
-        #     file.write(asm)
-        #     file.write("\n")
-        #
-        # file.close()
+        linearizer = XalangAstLinearizer()
+        linearizer.linearize(visitor.get_ast())
+
+        linear = linearizer.get_linear()
+
+        file = open(argv[2], "w")
+
+        for lin in linear:
+            file.write(str(lin))
+            file.write("\n")
+
+        file.close()
 
 
 if __name__ == '__main__':
