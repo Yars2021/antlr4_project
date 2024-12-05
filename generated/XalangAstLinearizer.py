@@ -196,7 +196,12 @@ class XalangAstLinearizer:
 
                     branch_ctr += 1
 
-            self.linear.append(["jmp", f"branch_else_{branch_num}"])
+            self.linear.append(["label", f"branch_else_{branch_num}"])
+
+            if len(node[1]) > 0 and node[1][-1][0] == "else":
+                self.linearize(node[1][-1][1])
+                
+            self.linear.append(["jmp", f"branch_end_{branch_num}"])
 
             branch_ctr = 0
 
@@ -207,11 +212,6 @@ class XalangAstLinearizer:
                     self.linear.append(["jmp", f"branch_else_{branch_num}"])
 
                 branch_ctr += 1
-
-            self.linear.append(["label", f"branch_else_{branch_num}"])
-
-            if len(node[1]) > 0 and node[1][-1][0] == "else":
-                self.linearize(node[1][-1][1])
 
             self.linear.append(["label", f"branch_end_{branch_num}"])
 
