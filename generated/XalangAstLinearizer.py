@@ -82,6 +82,8 @@ class XalangAstLinearizer:
 
             return ["%buf", buffer]
         elif node[0] == "ternary_op":
+            ternary_num = self.label_index
+
             expr = self.linearize(node[1])
             true = self.linearize(node[2])
             false = self.linearize(node[3])
@@ -89,12 +91,12 @@ class XalangAstLinearizer:
             buffer = self.lock_first_free()
 
             self.linear.append(["cmp", expr, ["lit", "int", "1"]])
-            self.linear.append(["jne", f"label_tern_false_{self.label_index}"])
+            self.linear.append(["jne", f"label_tern_false_{ternary_num}"])
             self.linear.append(["movb", ["%buf", buffer], true])
-            self.linear.append(["jmp", f"label_tern_end_{self.label_index}"])
-            self.linear.append(["label", f"label_tern_false_{self.label_index}"])
+            self.linear.append(["jmp", f"label_tern_end_{ternary_num}"])
+            self.linear.append(["label", f"label_tern_false_{ternary_num}"])
             self.linear.append(["movb", ["%buf", buffer], false])
-            self.linear.append(["label", f"label_tern_end_{self.label_index}"])
+            self.linear.append(["label", f"label_tern_end_{ternary_num}"])
 
             self.label_index += 1
 
@@ -161,21 +163,25 @@ class XalangAstLinearizer:
 
                 return ["%buf", buffer]
         elif node[0] == "loop":
-            self.linear.append(["label", f"loop_start_{self.label_index}"])
+            loop_num = self.label_index
+
+            self.linear.append(["label", f"loop_start_{loop_num}"])
 
             expr = self.linearize(node[1])
 
             self.linear.append(["cmp", expr, ["lit", "int", "1"]])
-            self.linear.append(["jne", f"loop_end_{self.label_index}"])
+            self.linear.append(["jne", f"loop_end_{loop_num}"])
             self.linearize(node[2])
-            self.linear.append(["jmp", f"loop_start_{self.label_index}"])
-            self.linear.append(["label", f"loop_end_{self.label_index}"])
+            self.linear.append(["jmp", f"loop_start_{loop_num}"])
+            self.linear.append(["label", f"loop_end_{loop_num}"])
 
             self.label_index += 1
 
             if expr[0] == "%buf":
                 self.unlock(expr[1])
         elif node[0] == "branch":
+            branch_num = self.label_index
+
             branch_ctr = 0
 
             for branch in node[1]:
@@ -183,31 +189,31 @@ class XalangAstLinearizer:
                     condition = self.linearize(branch[0])
 
                     self.linear.append(["cmp", condition, ["lit", "int", "1"]])
-                    self.linear.append(["je", f"branch_label_{self.label_index}_{branch_ctr}"])
+                    self.linear.append(["je", f"branch_label_{branch_num}_{branch_ctr}"])
 
                     if condition[0] == "%buf":
                         self.unlock(condition[1])
 
                     branch_ctr += 1
 
-            self.linear.append(["jmp", f"branch_else_{self.label_index}"])
+            self.linear.append(["jmp", f"branch_else_{branch_num}"])
 
             branch_ctr = 0
 
             for branch in node[1]:
                 if branch[0] != "else":
-                    self.linear.append(["label", f"branch_label_{self.label_index}_{branch_ctr}"])
+                    self.linear.append(["label", f"branch_label_{branch_num}_{branch_ctr}"])
                     self.linearize(branch[1])
-                    self.linear.append(["jmp", f"branch_else_{self.label_index}"])
+                    self.linear.append(["jmp", f"branch_else_{branch_num}"])
 
                 branch_ctr += 1
 
-            self.linear.append(["label", f"branch_else_{self.label_index}"])
+            self.linear.append(["label", f"branch_else_{branch_num}"])
 
             if len(node[1]) > 0 and node[1][-1][0] == "else":
                 self.linearize(node[1][-1][1])
 
-            self.linear.append(["label", f"branch_end_{self.label_index}"])
+            self.linear.append(["label", f"branch_end_{branch_num}"])
 
             self.label_index += 1
         elif node[0] == "pack":

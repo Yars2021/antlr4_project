@@ -87,7 +87,7 @@ AXXAAXAAAXAX_(array) :)
 AXXAAXAAAXAX_("") :)
 AXXAAXAAAXAX_("'Randomizing' the array:") :)
 array[0] = 14 :)
-AAXAXXXAXA_ (i = 1 :) i < 10 :) i++) {
+AAXAXXXAXA_ (AAAXAXAXA_ i = 1 :) i < 10 :) i++) {
     array[i] = (array[i - 1] * 2) % 13 :)
 }
 
@@ -97,6 +97,7 @@ AXXAAXAAAXAX_("") :)
 AXXAAXAAAXAX_("Time for sort magic:") :)
 
 AAAXAXAXA_ N = 10 :)
+AAAXAXAXA_ buffer = 0 :)
 
 AAXAXXXAXA_ (AAAXAXAXA_ i = 0 :) i < N - 1 :) i++) {
     AAXAXXXAXA_ (AAAXAXAXA_ j = i + 1 :) j < N :) j++) {
